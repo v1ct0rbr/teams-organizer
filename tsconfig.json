@@ -23,6 +23,6 @@
         "./src/utils/*"
       ],
     },
-    // "types": [ "jest", "styled-components-react-native"]
+    
   }
 }

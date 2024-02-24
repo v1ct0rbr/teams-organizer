@@ -8,4 +8,10 @@ export const Container = styled.View`
     
 `
 
+export const GroupCardContainer = styled.View`
+   
+    gap: 10px;
+    width: 100%
+`
+
 
