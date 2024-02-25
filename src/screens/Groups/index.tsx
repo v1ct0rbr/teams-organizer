@@ -1,10 +1,13 @@
 import { Header } from '@components/Header';
 import { Highlight } from '@components/Highlight';
-import { Container, GroupCardContainer } from './styles';
-import { View } from 'lucide-react-native';
+import { MyButton } from '@components/MyButton';
+import { Container } from '../../Layouts/MainLayout/styles';
 import { Groupcard } from './_Groupcard';
-import { Button, Text } from 'react-native';
-import { Groupadd } from './_Groupadd';
+import { GroupCardContainer } from './styles';
+import { NavigationProp } from '@react-navigation/native';
+
+
+
 
 export default function Groups() {
   return (
@@ -20,7 +23,8 @@ export default function Groups() {
 
       </GroupCardContainer>
      
-      <Groupadd />
+    
+       <MyButton title="Adicionar nova Turma" isPositionBottom></MyButton>
 
     </Container>
 

@@ -1,10 +1,13 @@
-import { StatusBar} from 'react-native';
 import { Roboto_400Regular, Roboto_700Bold, useFonts } from '@expo-google-fonts/roboto';
-import Groups from '@screens/Groups';
-// import { ActivityIndicator } from 'react-native';
-import { ThemeProvider } from 'styled-components/native';
-import { MainTheme } from './src/theme';
+import { StatusBar } from 'react-native';
 import { LoadingIndicator } from '@components/LoadingIndicator';
+import { ThemeProvider } from 'styled-components/native';
+import Routes from './src/routes';
+import { MainTheme } from './src/theme';
+
+
+
+
 
 
 export default function App() {
@@ -14,9 +17,11 @@ export default function App() {
   
 
   return (
-    <ThemeProvider theme={MainTheme}>
+    <ThemeProvider theme={MainTheme}>        
       <StatusBar barStyle="light-content" backgroundColor="transparent" translucent></StatusBar>
-      {fontsLoaded ? <Groups /> : <LoadingIndicator />}
+ 
+      {fontsLoaded ? 
+      <Routes /> : <LoadingIndicator />}
    </ThemeProvider>
   );
 }

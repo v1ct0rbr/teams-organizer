@@ -1,16 +1,30 @@
 import {styled} from 'styled-components/native'
-export const ButtonAdd = styled.TouchableOpacity`
-    position: absolute;
-    bottom: 0px;
+
+export const Container = styled.View`
+align-items: flex-start;
+width: 100%;
+flex:1
+
+`
+export const Button = styled.TouchableOpacity`
     width: 100%;
+    margin:auto;
     flex-direction: row;
     align-items: center;
     justify-content: center;
-    background-color: ${({theme}) => theme.COLORS.GREEN_700};
+    
     color: ${({theme}) => theme.COLORS.WHITE};
     height: 60px;
-    border-radius: 0cm;
+    border-radius: 5px;
     
+`
+
+export const ButtonSuccess = styled(Button)`
+    background-color: ${({theme}) => theme.COLORS.GREEN_700};
+`
+export const ButtonDanger = styled(Button)`
+    background-color: ${({theme}) => theme.COLORS.RED_DARK};
+  
 `
 
 export const ButtonTitle = styled.Text`

@@ -7,14 +7,14 @@ export const Container = styled.View`
     padding: 24px;
     align-items: center;
     justify-content: center;
-    gap: 20px;
+   
 
 `
 
 export const IconGroups = styled(Users2).attrs(({theme}) => ({
     color: theme.COLORS.GREEN_500,
     size: 24
-}))
+}))``
 
 export const FormInputGroup = styled.TextInput.attrs(({theme}) => ({
   placeholderTextColor:  theme.COLORS.GRAY_300
