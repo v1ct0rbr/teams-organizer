@@ -24,7 +24,7 @@ export function GroupContextProvider({
         activeGroupId: null,
     } as GroupState
 
-    function loadGroupState(arr: Array<Group>): GroupState {
+    function loadGroupState(arr: Array<Group>) {
         /* const savedSate = localStorage.getItem('@pomodo-timer:state-cycles-1.0.0')
     
         if (savedSate) {
@@ -34,12 +34,12 @@ export function GroupContextProvider({
             ...initialState,
             groups: arr as Array<Group>,
             
-        } as GroupState
+        } 
     }
    
    
     
-    const [groupState, dispatch] = useReducer(groupReducer, loadGroupState([]));
+    const [groupState, dispatch] = useReducer(groupReducer, [] as Array<Group>, loadGroupState);
 
     function createGroup(name: string) {
         dispatch({
