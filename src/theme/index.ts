@@ -1,4 +1,5 @@
 
+
 export const MainTheme = {
     COLORS: {
       WHITE: '#FFFFFF',
@@ -29,3 +30,4 @@ export const MainTheme = {
     }
   };
 
+  export const currentTheme = {...MainTheme}

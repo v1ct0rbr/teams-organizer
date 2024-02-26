@@ -13,7 +13,7 @@ export default function App() {
   return (
 
     <ThemeProvider theme={currentTheme}>
-      <StatusBar barStyle="light-content" backgroundColor={currentTheme.COLORS.GRAY_700}></StatusBar>
+      <StatusBar barStyle="light-content" backgroundColor={currentTheme.COLORS.GRAY_600} ></StatusBar>
       <SafeAreaProvider>
       {fontsLoaded ?
         <Routes /> : <LoadingIndicator />}

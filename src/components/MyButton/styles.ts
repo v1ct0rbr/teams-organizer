@@ -1,21 +1,22 @@
 import {styled} from 'styled-components/native'
 
 export const Container = styled.View`
-align-items: flex-start;
-width: 100%;
-flex:1
+    
+    width: 100%;
+    
 
 `
 export const Button = styled.TouchableOpacity`
     width: 100%;
     margin:auto;
+    display: flex;
     flex-direction: row;
     align-items: center;
-    justify-content: center;
-    
+    justify-content: center;    
     color: ${({theme}) => theme.COLORS.WHITE};
     height: 60px;
     border-radius: 5px;
+    position: absolute;
     
 `
 

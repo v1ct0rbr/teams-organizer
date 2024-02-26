@@ -8,12 +8,12 @@ interface HeaderProps extends NativeStackHeaderProps {
     showBackButton?: boolean
 }
 
-export function Header({ showBackButton = false}: HeaderProps) {
+export function Header({ showBackButton = false, navigation}: HeaderProps) {
     return (
         <Container>
             {showBackButton &&
 
-                <BackButton>
+                <BackButton onPress={() => navigation.goBack()}>
                     <BackIcon />
                 </BackButton>}
 

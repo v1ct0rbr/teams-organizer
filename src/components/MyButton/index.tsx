@@ -12,9 +12,9 @@ interface SubmitButtonProps extends TouchableOpacityProps{
 export function MyButton({title, isPositionBottom=false, isDanger=false, ...rest}: SubmitButtonProps) {
     return (
   <Container>
-       { isDanger ? <ButtonDanger style={isPositionBottom ? styles.ButtonBottom : null} {...rest}>
+       { isDanger ? <ButtonDanger style={isPositionBottom ? styles.ButtonBottom :styles.ButtonTop} {...rest}>
         <ButtonTitle>{title}</ButtonTitle>
-       </ButtonDanger> : <ButtonSuccess style={isPositionBottom ? styles.ButtonBottom : null} {...rest}>
+       </ButtonDanger> : <ButtonSuccess style={isPositionBottom ? styles.ButtonBottom : styles.ButtonTop} {...rest}>
         <ButtonTitle>{title}</ButtonTitle></ButtonSuccess>}
   </Container>      
 
@@ -24,8 +24,11 @@ export function MyButton({title, isPositionBottom=false, isDanger=false, ...rest
 
 const styles = StyleSheet.create({
     ButtonBottom:{
-    position: "absolute",
-    bottom: 0
+       bottom: 0
+    },
+    ButtonTop: {
+        
+       /* alignSelf: "flex-start" */
     }
     
 })

@@ -7,8 +7,11 @@ export const Container = styled.View`
     flex-direction: row;
     align-items: center;
     justify-content: center;
-    background-color: ${({theme}) => theme.COLORS.GRAY_700};
-    padding: 16px;
+    background-color: ${({theme}) => theme.COLORS.GRAY_600};
+    padding-top: 16px;
+    padding-left: 16px;
+    padding-right: 16px;
+    height: fit-content;
 `
 
 export const Logo = styled.Image`
