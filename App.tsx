@@ -5,19 +5,22 @@ import { ThemeProvider } from 'styled-components/native';
 import Routes from './src/routes';
 import { MainTheme } from './src/theme';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { GroupContextProvider } from './src/contexts/GroupContext';
 
 export default function App() {
   const [fontsLoaded] = useFonts({ Roboto_400Regular, Roboto_700Bold });
 
-  const currentTheme = {...MainTheme}
+  const currentTheme = { ...MainTheme }
   return (
 
     <ThemeProvider theme={currentTheme}>
-      <StatusBar barStyle="light-content" backgroundColor={currentTheme.COLORS.GRAY_600} ></StatusBar>
-      <SafeAreaProvider>
-      {fontsLoaded ?
-        <Routes /> : <LoadingIndicator />}
-      </SafeAreaProvider>
+      <GroupContextProvider>
+        <StatusBar barStyle="light-content" backgroundColor={currentTheme.COLORS.GRAY_600} ></StatusBar>
+        <SafeAreaProvider>
+          {fontsLoaded ?
+            <Routes /> : <LoadingIndicator />}
+        </SafeAreaProvider>
+      </GroupContextProvider>
     </ThemeProvider>
 
   );
