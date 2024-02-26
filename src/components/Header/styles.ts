@@ -7,7 +7,8 @@ export const Container = styled.View`
     flex-direction: row;
     align-items: center;
     justify-content: center;
-
+    background-color: ${({theme}) => theme.COLORS.GRAY_700};
+    padding: 16px;
 `
 
 export const Logo = styled.Image`
@@ -21,5 +22,5 @@ flex: 1;
 
 export const BackIcon = styled(ArrowLeft).attrs(({theme}) => ({
     color: theme.COLORS.WHITE,
-    size: 36
+    size: 32
 }))``
