@@ -1,10 +1,14 @@
-import { ReactNode, createContext, useReducer } from "react"
+import { ReactNode, createContext, useEffect, useReducer } from "react"
+import AsyncStorage from "@react-native-async-storage/async-storage"
 
 import { Group, groupReducer, GroupState } from "../reducers/GroupReducer"
+import { Alert } from "react-native"
+
 
 interface GroupContextType {
     createGroup: (data: string) => void
     removeGroup: (cycleId: string) => void
+
     groupState: GroupState
 }
 
@@ -24,22 +28,55 @@ export function GroupContextProvider({
         activeGroupId: null,
     } as GroupState
 
-    function loadGroupState(arr: Array<Group>) {
-        /* const savedSate = localStorage.getItem('@pomodo-timer:state-cycles-1.0.0')
-    
-        if (savedSate) {
-          return JSON.parse(savedSate) as StateCycle
-        } */
-        return {
-            ...initialState,
-            groups: arr as Array<Group>,
-            
-        } 
+
+    const [groupState, dispatch] = useReducer(groupReducer, initialState);
+
+
+    useEffect(() => {
+        loadGroupState()
+    }, [])
+
+    useEffect(() => {
+        saveGroupState()
+
+    }, [groupState])
+
+
+    const saveGroupState = async () => {
+        try {
+            await AsyncStorage.setItem(
+                '@teams-organizer:group-state-1.0.0',
+                JSON.stringify(groupState),
+            );
+        } catch (error) {
+            console.error('Erro ao salvar dados no AsyncStorage:', error);
+        }
     }
-   
-   
-    
-    const [groupState, dispatch] = useReducer(groupReducer, [] as Array<Group>, loadGroupState);
+
+    const loadGroupState = async () => {
+
+
+        AsyncStorage.getItem('@teams-organizer:group-state-1.0.0').then(savedDate => {
+            if (savedDate !== null) {
+                let result = JSON.parse(savedDate) as GroupState;
+                console.log(result.groups)
+                dispatch({
+                    type: "LOAD_STORAGE",
+                    payload: {
+                        loadedData: result
+                    }
+                })
+            } else
+                dispatch({
+                    type: "LOAD_STORAGE",
+                    payload: {
+                        loadedData: initialState
+                    }
+                })
+        })
+     
+
+    }
 
     function createGroup(name: string) {
         dispatch({

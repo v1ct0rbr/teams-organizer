@@ -3,7 +3,7 @@ import { Users } from 'lucide-react-native'
 import { styled } from 'styled-components/native'
 
 
-export const Container = styled.View`
+export const Container = styled.TouchableOpacity`
     width: 100%;
     height: 60px;
     border-radius: 5px;
@@ -11,6 +11,7 @@ export const Container = styled.View`
     align-items: center;
     padding-left: 20px;
     flex-direction: row;
+    margin-bottom: 16px;
 `
 
 

@@ -16,7 +16,7 @@ export const Button = styled.TouchableOpacity`
     color: ${({theme}) => theme.COLORS.WHITE};
     height: 60px;
     border-radius: 5px;
-    position: absolute;
+    
     
 `
 

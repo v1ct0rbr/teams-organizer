@@ -1,4 +1,5 @@
-
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import uuid from 'react-native-uuid'
 export interface Group {
     id: string;
     name: string
@@ -23,6 +24,7 @@ export interface GroupState {
 }
 
 type ActionTypes =
+    | { type: 'LOAD_STORAGE'; payload: { loadedData: GroupState} }
     | { type: 'ADD_NEW_GROUP'; payload: { name: string } }
     | { type: 'REMOVE_GROUP'; payload: { id: string | null } }
 
@@ -31,31 +33,46 @@ type ActionTypes =
  }
 */
 export function newGroupName(dataName: string): Group {
-    return { id: crypto.randomUUID(), name: dataName, teams: [] } as Group
+    return { id: uuid.v4(), name: dataName, teams: [] } as Group
 }
 
+const initialState = {
+    groups: [] as Array<Group>,
+    activeGroup: {} as Group,
+    activeGroupId: null,
+} as GroupState
+
+
+
 export function groupReducer(
-    groupState: GroupState,
+    state: GroupState,
     action: ActionTypes
 ) {
     switch (action.type) {
+        case "LOAD_STORAGE":
+            const savedState = action.payload.loadedData;
+            
+            if(savedState){
+                return savedState
+            }
+            return state
         case "ADD_NEW_GROUP":
             const newGroup = newGroupName(action.payload.name)
-            const grupoExistente = groupState.groups.findIndex(g => g.name == action.payload.name);
+            const grupoExistente = state.groups && state.groups.findIndex(g => g.name == action.payload.name);
             if (grupoExistente)
                 return {
-                    ...groupState,
-                    groups: [...groupState.groups, newGroup],
+                    ...state,
+                    groups: [...state.groups, newGroup],
                     activeGroup: newGroup,
                     activeGroupId: newGroup.id
                 } as GroupState
             else
-                return groupState
+                return state
         case "REMOVE_GROUP":
-            const newGroupList = groupState.groups.filter(g => g.id !== action.payload.id)
-            return newGroupList;
+            const newGroupList = state.groups.filter(g => g.id !== action.payload.id)
+            return { ...state, groups: newGroupList };
 
-        default: groupState
+        default: state
     }
 
 }

@@ -6,6 +6,20 @@ export const Container = styled.View`
  
  
 `
+export const NoContentView = styled.View`
+    flex: 1;
+    flex-direction: row;
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+`
+export const NoContentText = styled.Text`
+    
+    text-align: center;
+    color: ${({theme}) => theme.COLORS.WHITE};
+    font-size: ${({theme}) => theme.FONT_SIZE.LG};
+`
 
 
 

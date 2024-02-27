@@ -8,6 +8,8 @@ import { FlatList, Text, View } from 'react-native';
 import { RootStackParmaList } from '../../@types/rootstack';
 import { GroupContext } from '../../contexts/GroupContext';
 import { Groupcard } from './_Groupcard';
+import { NoContentText, NoContentView } from './styles';
+import { ListEnd } from 'lucide-react-native';
 
 type GroupsScreenProps = NativeStackScreenProps<RootStackParmaList, "Groups">;
 
@@ -28,17 +30,22 @@ export const Groups: React.FC<GroupsScreenProps> = ({navigation}) => {
       <FlatList data={groupState.groups} 
          keyExtractor={(item) => item.id.toString()}
         renderItem={({item}) => (
-        <Groupcard key={item.id} nameGroup={item.name} />
+        <Groupcard key={item.id} group={item} />
       )} showsVerticalScrollIndicator={false} ListEmptyComponent={() => (
-        <Text>Não há participantes</Text>
+        <NoContentView>
+            <ListEnd size={20} color="white" />
+            <NoContentText>Não há turmas</NoContentText>
+        </NoContentView>
+        
     )}/>    
          
 
       
      
     
-       <MyButton title="Adicionar nova Turma" isPositionBottom onPress={goToNewGroup}  ></MyButton>
+      
        </View>
+       <MyButton title="Adicionar nova Turma" isPositionBottom onPress={goToNewGroup}  ></MyButton>
     </MainContainer>
 
   );

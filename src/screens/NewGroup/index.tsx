@@ -28,7 +28,7 @@ export function NewGroup(){
         <Container>
         <IconGroups />
         <Highlight title="Nova Turma" subtitle="Crie uma turma para adcionar pessoas"></Highlight>
-        <FormInputGroup value={groupName} onChangeText={handleChangeInputValue} />
+        <FormInputGroup value={groupName} onChangeText={handleChangeInputValue} placeholder="Escreva o nome da turma" />
         <MyButton title="Criar" isPositionBottom={false} onPress={handleCreateNewGroup} />
         </Container>
     </MainContainer>)
