@@ -11,10 +11,12 @@ import { RootStackParmaList } from './@types/rootstack';
 
 
 
+
 const Stack = createNativeStackNavigator<RootStackParmaList>();
 export default function Routes() {
     return (
         <NavigationContainer>
+            
             <Stack.Navigator initialRouteName='Groups'
              screenOptions={{
                 header: props => <Header showBackButton={props.route.name != 'Groups'} {...props} />,

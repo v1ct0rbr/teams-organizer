@@ -18,15 +18,17 @@ interface GroupContextProviderProps {
     children: ReactNode
 }
 
+export const initialState = {
+    groups: [] as Array<Group>,
+    activeGroup: {} as Group,
+    activeGroupId: null,
+} as GroupState
+
 export function GroupContextProvider({
     children,
 }: GroupContextProviderProps) {
 
-    const initialState = {
-        groups: [] as Array<Group>,
-        activeGroup: {} as Group,
-        activeGroupId: null,
-    } as GroupState
+
 
 
     const [groupState, dispatch] = useReducer(groupReducer, initialState);

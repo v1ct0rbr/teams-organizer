@@ -1,5 +1,4 @@
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import uuid from 'react-native-uuid'
+import uuid from 'react-native-uuid';
 export interface Group {
     id: string;
     name: string
@@ -19,7 +18,7 @@ export interface Participant {
 
 export interface GroupState {
     groups: Group[]
-    activeGroup: Group
+    activeGroup: Group | null
     activeGroupId: string | null
 }
 
@@ -72,7 +71,8 @@ export function groupReducer(
             const newGroupList = state.groups.filter(g => g.id !== action.payload.id)
             return { ...state, groups: newGroupList };
 
-        default: state
+        default: 
+            return state
     }
 
 }

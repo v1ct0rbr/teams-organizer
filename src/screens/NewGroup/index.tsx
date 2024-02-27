@@ -1,35 +1,97 @@
-import { View } from "react-native";
+import { ToastAndroid, View } from "react-native";
 import { Container, FormInputGroup, IconGroups } from "./styles";
 import { Highlight } from "@components/Highlight";
 import { MainContainer } from "@components/MainContainer";
 import { MyButton } from "@components/MyButton";
 import { useContext, useState } from "react";
 import { GroupContext } from "../../contexts/GroupContext";
+import { useToast } from "react-native-toast-notifications";
+import z from 'zod'
+import { Controller, useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod"
+import { InputField } from "@components/InputFiled";
 
-export function NewGroup(){
+const FIELD_REQUIRED_STR = 'This field is required';
+
+export const signUpFormSchema = z.object({
+    name: z
+        .string({
+            invalid_type_error: 'Valor precisa ser uma string',
+            required_error: FIELD_REQUIRED_STR,
+        })
+        .min(3, 'Minimum 3 characters')
+        .max(20, 'Maximum 20 characters')
+        .trim(),
+
+});
+
+export type SignUpFormSchema = z.infer<typeof signUpFormSchema>;
+
+
+
+export function NewGroup() {
 
     const [groupName, setGroupName] = useState('');
-    const {} = useContext(GroupContext);
+    const { } = useContext(GroupContext);
+    const toast = useToast();
 
-    const {createGroup} = useContext(GroupContext)
+    const { createGroup } = useContext(GroupContext)
 
 
-    function handleChangeInputValue(text: string){
+    const methods = useForm<SignUpFormSchema>({
+        resolver: zodResolver(signUpFormSchema),
+        defaultValues: {
+            name: '',
+        },
+        mode: 'onBlur',
+    });
+
+
+
+    function handleChangeInputValue(text: string) {
         setGroupName(text);
     }
 
-    function handleCreateNewGroup(){
+    function handleCreateNewGroup() {
         createGroup(groupName);
         setGroupName('');
+        toast.show("Cadastrado com sucesso", {
+            type: "success",
+            placement: "top",
+            duration: 4000,
+            animationType: "slide-in",
+        });
     }
 
-    
+
     return (<MainContainer>
         <Container>
-        <IconGroups />
-        <Highlight title="Nova Turma" subtitle="Crie uma turma para adcionar pessoas"></Highlight>
-        <FormInputGroup value={groupName} onChangeText={handleChangeInputValue} placeholder="Escreva o nome da turma" />
-        <MyButton title="Criar" isPositionBottom={false} onPress={handleCreateNewGroup} />
+            <IconGroups />
+            <Highlight title="Nova Turma" subtitle="Crie uma turma para adcionar pessoas"></Highlight>
+
+            <Controller
+                control={methods.control}
+                name="name"
+                render={({
+                    field: { onChange, onBlur, value },
+                    fieldState: { error },
+                }) => {
+                    return (
+                        
+                        <InputField value={groupName} onBlur={onBlur} errorMessage={error?.message} onChangeText={handleChangeInputValue} placeholder="Escreva o nome da turma" />
+                    );
+                }}
+            />
+  {/* <TextInput
+                            label="Name"
+                            onBlur={onBlur}
+                            value={value}
+                            onChangeText={onChange}
+                            errorMessage={error?.message}
+                        /> */}
+
+            
+            <MyButton title="Criar" isPositionBottom={false} onPress={handleCreateNewGroup} />
         </Container>
     </MainContainer>)
 }

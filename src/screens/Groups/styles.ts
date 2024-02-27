@@ -18,7 +18,7 @@ export const NoContentText = styled.Text`
     
     text-align: center;
     color: ${({theme}) => theme.COLORS.WHITE};
-    font-size: ${({theme}) => theme.FONT_SIZE.LG};
+    font-size: ${({theme}) => theme.FONT_SIZE.LG}px;
 `
 
 
