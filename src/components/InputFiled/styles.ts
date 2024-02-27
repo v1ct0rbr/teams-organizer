@@ -13,3 +13,12 @@ export const FormInputGroup = styled.TextInput.attrs(({theme}) => ({
       color: ${({theme}) => theme.COLORS.WHITE};
       background-color: ${({theme}) => theme.COLORS.GRAY_700};
   `
+
+
+export const ErrorText = styled.Text`
+    width: 100%;
+    color: ${({theme}) => theme.COLORS.RED};
+    font-family: ${({theme}) => theme.FONT_FAMILY.BOLD} ;
+    padding-top: 5px;    
+
+`

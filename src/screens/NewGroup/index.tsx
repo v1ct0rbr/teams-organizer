@@ -7,7 +7,7 @@ import { useContext, useState } from "react";
 import { GroupContext } from "../../contexts/GroupContext";
 import { useToast } from "react-native-toast-notifications";
 import z from 'zod'
-import { Controller, useForm } from "react-hook-form";
+import { Controller, SubmitErrorHandler, SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod"
 import { InputField } from "@components/InputFiled";
 
@@ -19,8 +19,8 @@ export const signUpFormSchema = z.object({
             invalid_type_error: 'Valor precisa ser uma string',
             required_error: FIELD_REQUIRED_STR,
         })
-        .min(3, 'Minimum 3 characters')
-        .max(20, 'Maximum 20 characters')
+        .min(3, 'Mínimo de 3 caracteres')
+        .max(20, 'Máximo de 20 caracteres')
         .trim(),
 
 });
@@ -31,8 +31,8 @@ export type SignUpFormSchema = z.infer<typeof signUpFormSchema>;
 
 export function NewGroup() {
 
-    const [groupName, setGroupName] = useState('');
-    const { } = useContext(GroupContext);
+    
+    
     const toast = useToast();
 
     const { createGroup } = useContext(GroupContext)
@@ -45,24 +45,29 @@ export function NewGroup() {
         },
         mode: 'onBlur',
     });
-
-
-
-    function handleChangeInputValue(text: string) {
-        setGroupName(text);
+    function clearFieds() {
+        methods.reset({name: ''})
     }
 
-    function handleCreateNewGroup() {
-        createGroup(groupName);
-        setGroupName('');
+      const onSubmit: SubmitHandler<SignUpFormSchema> = (data) => {
+        createGroup(data.name);
         toast.show("Cadastrado com sucesso", {
             type: "success",
             placement: "top",
             duration: 4000,
             animationType: "slide-in",
         });
-    }
+        clearFieds()
+      };
+      
+      const onError: SubmitErrorHandler<SignUpFormSchema> = (
+        errors,e
+      ) => {
+       
+              console.log(JSON.stringify(errors));
+      };
 
+    
 
     return (<MainContainer>
         <Container>
@@ -72,26 +77,18 @@ export function NewGroup() {
             <Controller
                 control={methods.control}
                 name="name"
+                
                 render={({
                     field: { onChange, onBlur, value },
                     fieldState: { error },
                 }) => {
-                    return (
-                        
-                        <InputField value={groupName} onBlur={onBlur} errorMessage={error?.message} onChangeText={handleChangeInputValue} placeholder="Escreva o nome da turma" />
+                    return (                        
+                        <InputField id="group_name" maxLength={20} value={value} onBlur={onBlur} errorMessage={error?.message} onChangeText={onChange} placeholder="Escreva o nome da turma" />
                     );
                 }}
             />
-  {/* <TextInput
-                            label="Name"
-                            onBlur={onBlur}
-                            value={value}
-                            onChangeText={onChange}
-                            errorMessage={error?.message}
-                        /> */}
-
-            
-            <MyButton title="Criar" isPositionBottom={false} onPress={handleCreateNewGroup} />
+           
+            <MyButton title="Criar" isPositionBottom={false} onPress={methods.handleSubmit(onSubmit, onError)} />
         </Container>
     </MainContainer>)
 }

@@ -8,7 +8,7 @@ import { Alert } from "react-native"
 interface GroupContextType {
     createGroup: (data: string) => void
     removeGroup: (cycleId: string) => void
-
+    selectGroup: (id: string) => void
     groupState: GroupState
 }
 
@@ -89,6 +89,15 @@ export function GroupContextProvider({
         })
     }
 
+    function selectGroup(id: string) {
+        dispatch({
+            type: "SELECT_ACTIVE_GROUP",
+            payload: {
+                id: id
+            }
+        })
+    }
+
     function removeGroup(id: string) {
         dispatch({
             type: "REMOVE_GROUP",
@@ -102,6 +111,7 @@ export function GroupContextProvider({
         value={{
             createGroup,
             removeGroup,
+            selectGroup,
             groupState
         }}
     >

@@ -2,7 +2,7 @@ import { Container, Subtitle, Title } from "./styles";
 
 
 interface HighlightProps {
-    title: string
+    title?: string
     subtitle?: string
 }
 
