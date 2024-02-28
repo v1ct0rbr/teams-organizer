@@ -20,15 +20,15 @@ export const NoContentText = styled.Text`
     font-size: ${({theme}) => theme.FONT_SIZE.LG}px;
 `
 
-export const AddParticipantContainer = styled.View`
-    flex-direction: row;
 
-`
 
 export const AddParticipantButton = styled.TouchableOpacity`
-    flex: 1;
-    color: ${({theme}) => theme.COLORS.GREEN_700};
-    background: transparent;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    background-color: ${({theme}) => theme.COLORS.GRAY_700};
+    width: 10%;
+    height: 100%;
     border-radius: 5px;
 `
 
@@ -36,6 +36,8 @@ export const TeamContainer = styled.View`
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
+    margin-top: 10px;
+    margin-bottom: 10px;
 `
 
 export const TeamContainerItems = styled.View`
@@ -45,7 +47,10 @@ export const TeamContainerItems = styled.View`
 `
 
 export const TeamItem = styled.TouchableOpacity`
-
+    align-items: center;
+    justify-content: center;
+    padding: 5px;
+    border-radius: 5px;
 `
 export const TeamItemText = styled.Text`
     color: ${({theme}) => theme.COLORS.WHITE};

@@ -1,7 +1,7 @@
 import { ReactNode, createContext, useEffect, useReducer } from "react"
 import AsyncStorage from "@react-native-async-storage/async-storage"
 
-import { Group, groupReducer, GroupState } from "../reducers/GroupReducer"
+import { Group, groupReducer, GroupState, Team } from "../reducers/GroupReducer"
 import { Alert } from "react-native"
 
 
@@ -9,6 +9,7 @@ interface GroupContextType {
     createGroup: (data: string) => void
     removeGroup: (cycleId: string) => void
     selectGroup: (id: string) => void
+    addParticipantGroup: (activeGroupId: string, team: Team) => void
     groupState: GroupState
 }
 
@@ -107,11 +108,22 @@ export function GroupContextProvider({
         })
     }
 
+    function addParticipantGroup(activeGroupId: string, team: Team) {
+        dispatch({
+            type: "ADD_PARTICIPANT_TO_ACTIVE_GROUP",
+            payload: {
+                activeGroupId,
+                team
+            }
+        })
+    }
+
     return <GroupContext.Provider
         value={{
             createGroup,
             removeGroup,
             selectGroup,
+            addParticipantGroup,
             groupState
         }}
     >

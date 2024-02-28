@@ -5,13 +5,13 @@ import { MainContainer } from '@components/MainContainer';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import React, { useContext } from 'react';
 import { FlatList, Text, View } from 'react-native';
-import { RootStackParmaList } from '../../@types/rootstack';
+import { RootStackParamList } from '../../@types/rootstack';
 import { GroupContext } from '../../contexts/GroupContext';
 import { Groupcard } from './_Groupcard';
 import { NoContentText, NoContentView } from './styles';
 import { ListEnd } from 'lucide-react-native';
 
-type GroupsScreenProps = NativeStackScreenProps<RootStackParmaList, "Groups">;
+type GroupsScreenProps = NativeStackScreenProps<RootStackParamList, "Groups">;
 
 export const Groups: React.FC<GroupsScreenProps> = ({navigation}) => {
   

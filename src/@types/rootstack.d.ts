@@ -1,4 +1,5 @@
-export type RootStackParmaList = {
+export type RootStackParamList = {
     Groups: undefined
     NewGroup: undefined
+    EditGroup: undefined
 }

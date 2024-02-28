@@ -1,18 +1,41 @@
+import { Plus } from 'lucide-react-native'
 import styled from 'styled-components/native'
 
 export const Container = styled.View`
-    width: 100%;
+  width: 100%;
+   
+
 `
+export const InputContainer = styled.View`
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    background-color: ${({theme}) => theme.COLORS.GRAY_700};
+    border-radius: 5px;
+`
+
 
 export const FormInputGroup = styled.TextInput.attrs(({theme}) => ({
     placeholderTextColor:  theme.COLORS.GRAY_300
   }))`
-      width: 100%;
-      border-radius: 5px;
+      
       padding: 10px;
       color: ${({theme}) => theme.COLORS.WHITE};
-      background-color: ${({theme}) => theme.COLORS.GRAY_700};
-  `
+     
+`
+export const InputButton = styled.TouchableOpacity`
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+`
+
+export const InputButtonIcon = styled(Plus).attrs(({theme}) => ({
+    color: theme.COLORS.GREEN_700,
+    size: 24
+}))`
+    align-items: center;
+    justify-content: center;
+`
 
 
 export const ErrorText = styled.Text`

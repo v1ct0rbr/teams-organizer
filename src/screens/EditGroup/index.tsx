@@ -1,22 +1,24 @@
 import { Highlight } from '@components/Highlight';
 import { MyButton } from '@components/MyButton';
 
+import { InputField } from "@components/InputFiled";
 import { MainContainer } from '@components/MainContainer';
+import { zodResolver } from "@hookform/resolvers/zod";
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { ListEnd } from 'lucide-react-native';
 import React, { useContext, useState } from 'react';
-import { FlatList, Text, View } from 'react-native';
-import { RootStackParmaList } from '../../@types/rootstack';
-import { GroupContext } from '../../contexts/GroupContext';
-import { ParticipanteCard } from './_ParticipantCard';
-import { AddParticipantButton, AddParticipantContainer, NoContentText, NoContentView, TeamContainer, TeamContainerItems, TeamItem, TeamItemText } from './styles';
-import z from 'zod'
 import { Controller, SubmitErrorHandler, SubmitHandler, useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod"
-import { InputField } from "@components/InputFiled";
+import { Alert, FlatList, StyleSheet, View } from 'react-native';
 import { useToast } from 'react-native-toast-notifications';
+import z from 'zod';
+import { RootStackParamList } from '../../@types/rootstack';
+import { GroupContext } from '../../contexts/GroupContext';
+import { currentTheme } from '../../theme';
+import { ParticipanteCard } from './_ParticipantCard';
+import { NoContentText, NoContentView, TeamContainer, TeamContainerItems, TeamItem, TeamItemCount, TeamItemText } from './styles';
 
-type GroupsScreenProps = NativeStackScreenProps<RootStackParmaList, "Groups">;
+
+type EditGroupScreenProps = NativeStackScreenProps<RootStackParamList, "EditGroup">;
 
 
 const FIELD_REQUIRED_STR = 'This field is required';
@@ -34,7 +36,7 @@ export const signUpFormSchema = z.object({
 
 export type SignUpFormSchema = z.infer<typeof signUpFormSchema>;
 
-export const Groups: React.FC<GroupsScreenProps> = ({ navigation }) => {
+export const EditGroup: React.FC<EditGroupScreenProps> = ({ navigation }) => {
   const { groupState } = useContext(GroupContext)
   const [selectedTeam, setSelectedTeam] = useState(groupState.activeGroup?.teamA)
 
@@ -53,6 +55,14 @@ export const Groups: React.FC<GroupsScreenProps> = ({ navigation }) => {
 });
 function clearFieds() {
     methods.reset({name: ''})
+}
+
+function handleSelectTeam(team: 'A' | 'B'){
+   switch(team){
+    case 'A': setSelectedTeam(groupState.activeGroup?.teamA);
+        break;
+    case 'B': setSelectedTeam(groupState.activeGroup?.teamB);
+   }
 }
 
   const onSubmit: SubmitHandler<SignUpFormSchema> = (data) => {
@@ -88,22 +98,22 @@ function clearFieds() {
                     fieldState: { error },
                 }) => {
                     return (     
-                      <AddParticipantContainer>
-                        <InputField id="group_name" maxLength={20} value={value} onBlur={onBlur} errorMessage={error?.message} onChangeText={onChange} placeholder="Nome do participante" />
-                        <AddParticipantButton></AddParticipantButton>
-                      </AddParticipantContainer>                   
+                     
+                        <InputField action={() => Alert.alert('teste')} id="group_name" maxLength={20} value={value} onBlur={onBlur} errorMessage={error?.message} onChangeText={onChange} placeholder="Nome do participante" />
+                     
+                     
                     );
                 }}
             />
      
-     <TeamContainer>
+            <TeamContainer>
                 <TeamContainerItems>
-                  <TeamItem>
-                    <TeamItemText> TIME A</TeamItemText></TeamItem>
-                  <TeamItem>
+                  <TeamItem style={selectedTeam?.name == "TIME A" ? localStyles.selectedTeam : {}} onPress={() => handleSelectTeam("A")}>
+                    <TeamItemText>TIME A</TeamItemText></TeamItem>
+                  <TeamItem style={selectedTeam?.name == "TIME B" ? localStyles.selectedTeam : {}} onPress={() => handleSelectTeam("B")}>
                     <TeamItemText>TIME B</TeamItemText></TeamItem>
                 </TeamContainerItems>
-                <Text>{selectedTeam?.participants?.length}</Text>
+                <TeamItemCount>{selectedTeam?.participants?.length}</TeamItemCount>
 
      </TeamContainer>
 
@@ -128,5 +138,13 @@ function clearFieds() {
 
   );
 }
+
+const localStyles = StyleSheet.create({
+  selectedTeam:{
+    borderWidth: 2,
+    borderStyle: 'solid',
+    borderColor: currentTheme.COLORS.GREEN_700
+  }
+})
 
 

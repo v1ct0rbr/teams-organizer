@@ -3,13 +3,12 @@ export interface Group {
     id: string;
     name: string
     teamA: Team,
-    TeamB: Team
+    teamB: Team
     
 }
 
 export interface Team {
     name: string
-    selected?: boolean
     participants?: Participant[]
 }
 
@@ -28,15 +27,15 @@ type ActionTypes =
     | { type: 'LOAD_STORAGE'; payload: { loadedData: GroupState} }
     | { type: 'ADD_NEW_GROUP'; payload: { name: string } }
     | { type: 'REMOVE_GROUP'; payload: { id: string | null } } 
-    | { type: 'SELECT_ACTIVE_GROUP'; payload: { id: string } 
-}
+    | { type: 'SELECT_ACTIVE_GROUP'; payload: { id: string } }
+    | { type: 'ADD_PARTICIPANT_TO_ACTIVE_GROUP'; payload: { activeGroupId: string, team: Team } }
 
 /*  export function newGroup(group: Group): Group {
    return { id: crypto.randomUUID(), name: group.name, teams : [] } as Group
  }
 */
 export function newGroupName(dataName: string): Group {
-    return { id: uuid.v4(), name: dataName, teamA: {name: 'Team A', participants: []}, TeamB: {name: 'Team B', participants: []} } as Group
+    return { id: uuid.v4(), name: dataName, teamA: {name: 'TIME A', participants: []}, teamB: {name: 'TIME B', participants: []} } as Group
 }
 
 const initialState = {
@@ -80,6 +79,22 @@ export function groupReducer(
                 return { ...state, activeGroup: selectedGroup } as GroupState;
             else
             return state
+        case "ADD_PARTICIPANT_TO_ACTIVE_GROUP":
+
+                let groups = [] as Array<Group>;
+                let group = {} as Group;
+                state.groups.forEach(g => {
+                    if(g.id == action.payload.activeGroupId){
+                        group = g.teamA.name == action.payload.team.name ? {...g, teamA: action.payload.team } : {...g, teamB: action.payload.team}
+                        groups.push(group);
+                        
+                    }else{
+                        group = {...g}
+                        groups.push(group)  
+                    }
+                })
+                return {...state, groups: groups}
+     
 
         default: 
             return state
