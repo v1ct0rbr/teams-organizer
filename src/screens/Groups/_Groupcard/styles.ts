@@ -5,7 +5,7 @@ import { styled } from 'styled-components/native'
 
 export const Container = styled.TouchableOpacity`
     width: 100%;
-    height: 60px;
+    height:80px;
     border-radius: 5px;
     background-color: ${({theme}) => theme.COLORS.GRAY_500};
     align-items: center;

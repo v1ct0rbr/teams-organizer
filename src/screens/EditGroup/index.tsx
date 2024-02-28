@@ -14,16 +14,16 @@ import { useToast } from 'react-native-toast-notifications';
 import z from 'zod';
 import { RootStackParamList } from '../../@types/rootstack';
 import { GroupContext } from '../../contexts/GroupContext';
-import { currentTheme } from '../../theme';
 import { ParticipanteCard } from './_ParticipantCard';
 import { NoContentText, NoContentView, TeamContainer, TeamContainerItems, TeamItem, TeamItemCount, TeamItemText } from './styles';
+import { useTheme } from 'styled-components/native';
 
 
 type EditGroupScreenProps = NativeStackScreenProps<RootStackParamList, "EditGroup">;
 
 
 const FIELD_REQUIRED_STR = 'This field is required';
-export const signUpFormSchema = z.object({
+export const editGroupFormSchema = z.object({
   name: z
     .string({
       invalid_type_error: 'Valor precisa ser uma string',
@@ -35,10 +35,12 @@ export const signUpFormSchema = z.object({
 
 });
 
-export type SignUpFormSchema = z.infer<typeof signUpFormSchema>;
+
+export type EditGroupFormSchema = z.infer<typeof editGroupFormSchema>;
 
 export const EditGroup: React.FC<EditGroupScreenProps> = ({ navigation }) => {
   const { groupState, updateTeam, removeGroup } = useContext(GroupContext)
+  const theme = useTheme()
   const toast = useToast();
   const [selectedTeam, setSelectedTeam] = useState(groupState.activeGroup.teamA)
   const goToNewGroup = () => {
@@ -46,8 +48,8 @@ export const EditGroup: React.FC<EditGroupScreenProps> = ({ navigation }) => {
   }
 
 
-  const methods = useForm<SignUpFormSchema>({
-    resolver: zodResolver(signUpFormSchema),
+  const methods = useForm<EditGroupFormSchema>({
+    resolver: zodResolver(editGroupFormSchema),
     defaultValues: {
       name: '',
     },
@@ -66,26 +68,24 @@ export const EditGroup: React.FC<EditGroupScreenProps> = ({ navigation }) => {
     }
   }
   function handleRemoveGroup() {
-      removeGroup(groupState.activeGroup.id);
-      navigation.navigate('Groups');
-      toast.show("Grupo excluído", {
-        type: "success",
-        placement: "top",
-        duration: 4000,
-        animationType: "slide-in",
+    removeGroup(groupState.activeGroup.id);
+    navigation.navigate('Groups');
+    toast.show("Grupo excluído", {
+      type: "success",
+      placement: "top",
+      duration: 4000,
+      animationType: "slide-in",
     });
   }
 
-  const onSubmit: SubmitHandler<SignUpFormSchema> = (data) => {
-    //createGroup(data.name);
-    
-   const existingParticipantIndex = selectedTeam?.participants && selectedTeam?.participants.findIndex(p => p.name == data.name);
+  const onSubmit: SubmitHandler<EditGroupFormSchema> = (data) => {
 
-    if(existingParticipantIndex && existingParticipantIndex > -1){
+    const existingParticipantIndex = selectedTeam?.participants && selectedTeam?.participants.findIndex(p => p.name == data.name);
+    if (existingParticipantIndex && existingParticipantIndex > -1) {
       return
-    }else{
-      let newParticipants = [...selectedTeam.participants, {id: uuid.v4().toString(), name: data.name }]
-      let team = {...selectedTeam, participants: newParticipants};
+    } else {
+      let newParticipants = [...selectedTeam.participants, { id: uuid.v4().toString(), name: data.name }]
+      let team = { ...selectedTeam, participants: newParticipants };
       setSelectedTeam(team);
       updateTeam(groupState.activeGroup.id, team);
     }
@@ -93,23 +93,32 @@ export const EditGroup: React.FC<EditGroupScreenProps> = ({ navigation }) => {
   };
 
   const handleRemoveParticipant = (id: string) => {
-   
-      let newParticipants = selectedTeam.participants.filter(p => p.id != id);
-      let team = {...selectedTeam, participants: newParticipants};
-      setSelectedTeam(team);
-      updateTeam(groupState.activeGroup.id, team);
-     
-     
+
+    let newParticipants = selectedTeam.participants.filter(p => p.id != id);
+    let team = { ...selectedTeam, participants: newParticipants };
+    setSelectedTeam(team);
+    updateTeam(groupState.activeGroup.id, team);
+
+
   }
 
 
 
 
-  const onError: SubmitErrorHandler<SignUpFormSchema> = (
+  const onError: SubmitErrorHandler<EditGroupFormSchema> = (
     errors, e
   ) => {
     console.log(JSON.stringify(errors));
   };
+
+  const localStyles = StyleSheet.create({
+    selectedTeam: {
+      borderWidth: 2,
+      borderStyle: 'solid',
+      borderColor: theme.COLORS.GREEN_700,
+      /* lineHeight:0 */
+    }
+  })
 
 
   return (
@@ -126,10 +135,7 @@ export const EditGroup: React.FC<EditGroupScreenProps> = ({ navigation }) => {
           fieldState: { error },
         }) => {
           return (
-
             <InputField action={methods.handleSubmit(onSubmit, onError)} id="group_name" maxLength={20} value={value} onBlur={onBlur} errorMessage={error?.message} onChangeText={onChange} placeholder="Nome do participante" />
-
-
           );
         }}
       />
@@ -167,13 +173,6 @@ export const EditGroup: React.FC<EditGroupScreenProps> = ({ navigation }) => {
   );
 }
 
-const localStyles = StyleSheet.create({
-  selectedTeam: {
-    borderWidth: 2,
-    borderStyle: 'solid',
-    borderColor: currentTheme.COLORS.GREEN_700,
-    /* lineHeight:0 */
-  }
-})
+
 
 

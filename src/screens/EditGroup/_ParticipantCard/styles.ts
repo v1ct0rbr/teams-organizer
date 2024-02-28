@@ -39,8 +39,6 @@ export const RemoveParticipantButton = styled.TouchableOpacity`
     color:  ${({theme}) => theme.COLORS.RED_DARK};
     width: fit-content;
 `
-
 export const RemoveParticipantButtonIcon = styled(Trash2).attrs(({theme}) => ({
     color: theme.COLORS.RED_DARK
-
 }) )``

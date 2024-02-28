@@ -1,5 +1,5 @@
 import { User, Users2 } from 'lucide-react-native'
-import {styled} from 'styled-components/native'
+import {css, styled} from 'styled-components/native'
 
 export const Container = styled.View`
     padding-top: 150px;
@@ -22,6 +22,9 @@ export const FormInputGroup = styled.TextInput.attrs(({theme}) => ({
     width: 100%;
     border-radius: 5px;
     padding: 10px;
-    color: ${({theme}) => theme.COLORS.WHITE};
-    background-color: ${({theme}) => theme.COLORS.GRAY_700};
+    ${({theme}) => css`
+        color: ${theme.COLORS.WHITE};
+        background-color: ${theme.COLORS.GRAY_700};
+    `}
+    
 `
