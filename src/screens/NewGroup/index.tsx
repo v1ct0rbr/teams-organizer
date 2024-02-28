@@ -31,8 +31,8 @@ export type SignUpFormSchema = z.infer<typeof signUpFormSchema>;
 
 export function NewGroup() {
 
-    
-    
+
+
     const toast = useToast();
 
     const { createGroup } = useContext(GroupContext)
@@ -46,10 +46,10 @@ export function NewGroup() {
         mode: 'onBlur',
     });
     function clearFieds() {
-        methods.reset({name: ''})
+        methods.reset({ name: '' })
     }
 
-      const onSubmit: SubmitHandler<SignUpFormSchema> = (data) => {
+    const onSubmit: SubmitHandler<SignUpFormSchema> = (data) => {
         createGroup(data.name);
         toast.show("Cadastrado com sucesso", {
             type: "success",
@@ -58,16 +58,16 @@ export function NewGroup() {
             animationType: "slide-in",
         });
         clearFieds()
-      };
-      
-      const onError: SubmitErrorHandler<SignUpFormSchema> = (
-        errors,e
-      ) => {
-       
-              console.log(JSON.stringify(errors));
-      };
+    };
 
-    
+    const onError: SubmitErrorHandler<SignUpFormSchema> = (
+        errors, e
+    ) => {
+
+        console.log(JSON.stringify(errors));
+    };
+
+
 
     return (<MainContainer>
         <Container>
@@ -77,17 +77,16 @@ export function NewGroup() {
             <Controller
                 control={methods.control}
                 name="name"
-                
+
                 render={({
                     field: { onChange, onBlur, value },
                     fieldState: { error },
                 }) => {
-                    return (                        
+                    return (
                         <InputField id="group_name" maxLength={20} value={value} onBlur={onBlur} errorMessage={error?.message} onChangeText={onChange} placeholder="Escreva o nome da turma" />
                     );
                 }}
             />
-           
             <MyButton title="Criar" isPositionBottom={false} onPress={methods.handleSubmit(onSubmit, onError)} />
         </Container>
     </MainContainer>)

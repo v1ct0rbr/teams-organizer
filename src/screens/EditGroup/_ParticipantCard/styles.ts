@@ -1,5 +1,5 @@
 
-import { User, Users } from 'lucide-react-native'
+import { Trash2, User } from 'lucide-react-native'
 import { styled } from 'styled-components/native'
 
 
@@ -7,7 +7,6 @@ export const UserContainer = styled.View`
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
-    
     width: 100%;
     height: 60px;
     border-radius: 5px;
@@ -18,6 +17,7 @@ export const UserContainer = styled.View`
     margin-bottom: 16px;
 `
 export const UserInfo = styled.View`
+    width: 100%;
     flex-direction: row;
     gap: 5px;
     align-items: center;
@@ -37,4 +37,10 @@ export const RemoveParticipantButton = styled.TouchableOpacity`
     align-items: center;
     justify-content: center;
     color:  ${({theme}) => theme.COLORS.RED_DARK};
+    width: fit-content;
 `
+
+export const RemoveParticipantButtonIcon = styled(Trash2).attrs(({theme}) => ({
+    color: theme.COLORS.RED_DARK
+
+}) )``

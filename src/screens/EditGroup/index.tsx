@@ -1,5 +1,6 @@
 import { Highlight } from '@components/Highlight';
 import { MyButton } from '@components/MyButton';
+import uuid from 'react-native-uuid'
 
 import { InputField } from "@components/InputFiled";
 import { MainContainer } from '@components/MainContainer';
@@ -24,23 +25,22 @@ type EditGroupScreenProps = NativeStackScreenProps<RootStackParamList, "EditGrou
 const FIELD_REQUIRED_STR = 'This field is required';
 export const signUpFormSchema = z.object({
   name: z
-      .string({
-          invalid_type_error: 'Valor precisa ser uma string',
-          required_error: FIELD_REQUIRED_STR,
-      })
-      .min(3, 'Mínimo de 3 caracteres')
-      .max(20, 'Máximo de 20 caracteres')
-      .trim(),
+    .string({
+      invalid_type_error: 'Valor precisa ser uma string',
+      required_error: FIELD_REQUIRED_STR,
+    })
+    .min(3, 'Mínimo de 3 caracteres')
+    .max(20, 'Máximo de 20 caracteres')
+    .trim(),
 
 });
 
 export type SignUpFormSchema = z.infer<typeof signUpFormSchema>;
 
 export const EditGroup: React.FC<EditGroupScreenProps> = ({ navigation }) => {
-  const { groupState } = useContext(GroupContext)
-  const [selectedTeam, setSelectedTeam] = useState(groupState.activeGroup?.teamA)
-
+  const { groupState, updateTeam, removeGroup } = useContext(GroupContext)
   const toast = useToast();
+  const [selectedTeam, setSelectedTeam] = useState(groupState.activeGroup.teamA)
   const goToNewGroup = () => {
     navigation.navigate('NewGroup');
   }
@@ -49,38 +49,66 @@ export const EditGroup: React.FC<EditGroupScreenProps> = ({ navigation }) => {
   const methods = useForm<SignUpFormSchema>({
     resolver: zodResolver(signUpFormSchema),
     defaultValues: {
-        name: '',
+      name: '',
     },
     mode: 'onBlur',
-});
-function clearFieds() {
-    methods.reset({name: ''})
-}
+  });
 
-function handleSelectTeam(team: 'A' | 'B'){
-   switch(team){
-    case 'A': setSelectedTeam(groupState.activeGroup?.teamA);
+  function clearFieds() {
+    methods.reset({ name: '' })
+  }
+
+  function handleSelectTeam(team: 'A' | 'B') {
+    switch (team) {
+      case 'A': setSelectedTeam(groupState.activeGroup.teamA);
         break;
-    case 'B': setSelectedTeam(groupState.activeGroup?.teamB);
-   }
-}
-
-  const onSubmit: SubmitHandler<SignUpFormSchema> = (data) => {
-    //createGroup(data.name);
-    toast.show("Cadastrado com sucesso", {
+      case 'B': setSelectedTeam(groupState.activeGroup.teamB);
+    }
+  }
+  function handleRemoveGroup() {
+      removeGroup(groupState.activeGroup.id);
+      navigation.navigate('Groups');
+      toast.show("Grupo excluído", {
         type: "success",
         placement: "top",
         duration: 4000,
         animationType: "slide-in",
     });
+  }
+
+  const onSubmit: SubmitHandler<SignUpFormSchema> = (data) => {
+    //createGroup(data.name);
+    
+   const existingParticipantIndex = selectedTeam?.participants && selectedTeam?.participants.findIndex(p => p.name == data.name);
+
+    if(existingParticipantIndex && existingParticipantIndex > -1){
+      return
+    }else{
+      let newParticipants = [...selectedTeam.participants, {id: uuid.v4().toString(), name: data.name }]
+      let team = {...selectedTeam, participants: newParticipants};
+      setSelectedTeam(team);
+      updateTeam(groupState.activeGroup.id, team);
+    }
     clearFieds()
   };
-  
-  const onError: SubmitErrorHandler<SignUpFormSchema> = (
-    errors,e
-  ) => {
+
+  const handleRemoveParticipant = (id: string) => {
    
-          console.log(JSON.stringify(errors));
+      let newParticipants = selectedTeam.participants.filter(p => p.id != id);
+      let team = {...selectedTeam, participants: newParticipants};
+      setSelectedTeam(team);
+      updateTeam(groupState.activeGroup.id, team);
+     
+     
+  }
+
+
+
+
+  const onError: SubmitErrorHandler<SignUpFormSchema> = (
+    errors, e
+  ) => {
+    console.log(JSON.stringify(errors));
   };
 
 
@@ -91,39 +119,39 @@ function handleSelectTeam(team: 'A' | 'B'){
       <Highlight title={groupState.activeGroup?.name} subtitle='adicione a galera e separe os times'></Highlight>
 
       <Controller
-                control={methods.control}
-                name="name"                
-                render={({
-                    field: { onChange, onBlur, value },
-                    fieldState: { error },
-                }) => {
-                    return (     
-                     
-                        <InputField action={() => Alert.alert('teste')} id="group_name" maxLength={20} value={value} onBlur={onBlur} errorMessage={error?.message} onChangeText={onChange} placeholder="Nome do participante" />
-                     
-                     
-                    );
-                }}
-            />
-     
-            <TeamContainer>
-                <TeamContainerItems>
-                  <TeamItem style={selectedTeam?.name == "TIME A" ? localStyles.selectedTeam : {}} onPress={() => handleSelectTeam("A")}>
-                    <TeamItemText>TIME A</TeamItemText></TeamItem>
-                  <TeamItem style={selectedTeam?.name == "TIME B" ? localStyles.selectedTeam : {}} onPress={() => handleSelectTeam("B")}>
-                    <TeamItemText>TIME B</TeamItemText></TeamItem>
-                </TeamContainerItems>
-                <TeamItemCount>{selectedTeam?.participants?.length}</TeamItemCount>
+        control={methods.control}
+        name="name"
+        render={({
+          field: { onChange, onBlur, value },
+          fieldState: { error },
+        }) => {
+          return (
 
-     </TeamContainer>
+            <InputField action={methods.handleSubmit(onSubmit, onError)} id="group_name" maxLength={20} value={value} onBlur={onBlur} errorMessage={error?.message} onChangeText={onChange} placeholder="Nome do participante" />
+
+
+          );
+        }}
+      />
+
+      <TeamContainer>
+        <TeamContainerItems>
+          <TeamItem style={selectedTeam?.name == "TIME A" ? localStyles.selectedTeam : {}} onPress={() => handleSelectTeam("A")}>
+            <TeamItemText>{groupState.activeGroup?.teamA.name}</TeamItemText></TeamItem>
+          <TeamItem style={selectedTeam?.name == "TIME B" ? localStyles.selectedTeam : {}} onPress={() => handleSelectTeam("B")}>
+            <TeamItemText>{groupState.activeGroup?.teamB.name}</TeamItemText></TeamItem>
+        </TeamContainerItems>
+        <TeamItemCount>{selectedTeam?.participants?.length}</TeamItemCount>
+
+      </TeamContainer>
 
       <View style={{ flex: 1, justifyContent: 'space-between' }}>
         {selectedTeam &&
-          
+
           <FlatList data={selectedTeam?.participants}
             keyExtractor={(item) => item.id.toString()}
             renderItem={({ item }) => (
-              <ParticipanteCard key={item.id} participant={item} />
+              <ParticipanteCard key={item.id} participant={item} removeAction={handleRemoveParticipant} />
             )} showsVerticalScrollIndicator={false} ListEmptyComponent={() => (
               <NoContentView>
                 <ListEnd size={20} color="white" />
@@ -133,17 +161,18 @@ function handleSelectTeam(team: 'A' | 'B'){
             )} />
         }
       </View>
-      <MyButton title="Remover turma" isPositionBottom onPress={goToNewGroup} isDanger ></MyButton>
+      <MyButton title="Remover turma" isPositionBottom onPress={handleRemoveGroup} isDanger ></MyButton>
     </MainContainer>
 
   );
 }
 
 const localStyles = StyleSheet.create({
-  selectedTeam:{
+  selectedTeam: {
     borderWidth: 2,
     borderStyle: 'solid',
-    borderColor: currentTheme.COLORS.GREEN_700
+    borderColor: currentTheme.COLORS.GREEN_700,
+    /* lineHeight:0 */
   }
 })
 

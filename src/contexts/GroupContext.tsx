@@ -9,7 +9,7 @@ interface GroupContextType {
     createGroup: (data: string) => void
     removeGroup: (cycleId: string) => void
     selectGroup: (id: string) => void
-    addParticipantGroup: (activeGroupId: string, team: Team) => void
+    updateTeam: (activeGroupId: string, team: Team) => void
     groupState: GroupState
 }
 
@@ -108,9 +108,9 @@ export function GroupContextProvider({
         })
     }
 
-    function addParticipantGroup(activeGroupId: string, team: Team) {
+    function updateTeam(activeGroupId: string, team: Team) {
         dispatch({
-            type: "ADD_PARTICIPANT_TO_ACTIVE_GROUP",
+            type: "UPDATE_TEAM",
             payload: {
                 activeGroupId,
                 team
@@ -123,7 +123,7 @@ export function GroupContextProvider({
             createGroup,
             removeGroup,
             selectGroup,
-            addParticipantGroup,
+            updateTeam,
             groupState
         }}
     >

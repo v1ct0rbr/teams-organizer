@@ -1,28 +1,33 @@
 import { useContext } from "react"
 import { Group, Participant } from "../../../reducers/GroupReducer"
-import { UserContainer, ParticipanteTitle, IconUserGroup, UserInfo, RemoveParticipantButton } from "./styles"
+import { UserContainer, ParticipanteTitle, IconUserGroup, UserInfo, RemoveParticipantButton, RemoveParticipantButtonIcon } from "./styles"
 import { GroupContext } from "../../../contexts/GroupContext"
+import { TouchableOpacityProps } from "react-native"
 
 
-interface ParticipantCardProps{
+interface ParticipantCardProps {
     participant: Participant
+    removeAction: (idParticipant: string) => void
+    
 }
 
-export function ParticipanteCard({participant} : ParticipantCardProps) {
+export function ParticipanteCard({ participant, removeAction }: ParticipantCardProps) {
 
-        const {removeGroup} = useContext(GroupContext);
+    
 
-    function handleRemoveGroup(){
-        removeGroup(participant.id);
+    function handleRemoveGroup() {
+        removeAction(participant.id);
     }
 
     return (
         <UserContainer >
             <UserInfo>
-            <IconUserGroup />
-            <ParticipanteTitle>{participant.name}</ParticipanteTitle>
+                <IconUserGroup />
+                <ParticipanteTitle>{participant.name}</ParticipanteTitle>
             </UserInfo>
-            <RemoveParticipantButton></RemoveParticipantButton>
+            <RemoveParticipantButton onPress={handleRemoveGroup}>
+                <RemoveParticipantButtonIcon />
+            </RemoveParticipantButton>
         </UserContainer>
     )
 }

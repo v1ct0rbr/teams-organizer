@@ -7,7 +7,7 @@ import { LucideIcon, LucideProps, View } from "lucide-react-native"
 interface InputFieldProps extends TextInputProps {
     errorMessage?: string
     onBlur: Noop
-    action?: () => void,
+    action?: ({...props}: any) => any,
     
     
 }

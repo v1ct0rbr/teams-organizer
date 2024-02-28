@@ -9,7 +9,7 @@ export interface Group {
 
 export interface Team {
     name: string
-    participants?: Participant[]
+    participants: Participant[]
 }
 
 export interface Participant {
@@ -19,7 +19,7 @@ export interface Participant {
 
 export interface GroupState {
     groups: Group[]
-    activeGroup: Group | null    
+    activeGroup: Group    
     activeGroupId: string | null
 }
 
@@ -28,7 +28,7 @@ type ActionTypes =
     | { type: 'ADD_NEW_GROUP'; payload: { name: string } }
     | { type: 'REMOVE_GROUP'; payload: { id: string | null } } 
     | { type: 'SELECT_ACTIVE_GROUP'; payload: { id: string } }
-    | { type: 'ADD_PARTICIPANT_TO_ACTIVE_GROUP'; payload: { activeGroupId: string, team: Team } }
+    | { type: 'UPDATE_TEAM'; payload: { activeGroupId: string, team: Team } }
 
 /*  export function newGroup(group: Group): Group {
    return { id: crypto.randomUUID(), name: group.name, teams : [] } as Group
@@ -71,15 +71,21 @@ export function groupReducer(
             else
                 return state
         case "REMOVE_GROUP":
+           /*  const newGroupList = state.groups.filter(g => g.id !== action.payload.id)
+            if(action.payload.id == state.activeGroup?.id)
+                return {...state, activeGroup: {}, groups: newGroupList} */
+               
             const newGroupList = state.groups.filter(g => g.id !== action.payload.id)
+            if(action.payload.id == state.activeGroup?.id)
+                return { ...state, activeGroup: {} as Group, activeGroupId: null, groups: newGroupList}
             return { ...state, groups: newGroupList };
         case "SELECT_ACTIVE_GROUP":
                 const selectedGroup = state.groups.find(g => g.id == action.payload.id)
                 if (selectedGroup)
-                return { ...state, activeGroup: selectedGroup } as GroupState;
+                return { ...state, activeGroup: selectedGroup, activeGroupId: action.payload.id } as GroupState;
             else
             return state
-        case "ADD_PARTICIPANT_TO_ACTIVE_GROUP":
+        case "UPDATE_TEAM":
 
                 let groups = [] as Array<Group>;
                 let group = {} as Group;
@@ -93,7 +99,7 @@ export function groupReducer(
                         groups.push(group)  
                     }
                 })
-                return {...state, groups: groups}
+                return {...state, groups: groups, activeGroup: group}
      
 
         default: 
