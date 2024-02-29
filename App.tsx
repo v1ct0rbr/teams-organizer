@@ -6,7 +6,6 @@ import {
 } from "@expo-google-fonts/roboto";
 import { Routes } from "@routes/index";
 import { StatusBar } from "react-native";
-import { SafeAreaProvider } from "react-native-safe-area-context";
 import { ToastProvider } from "react-native-toast-notifications";
 import { ThemeProvider } from "styled-components/native";
 
@@ -24,11 +23,11 @@ export default function App() {
           barStyle="light-content"
           backgroundColor={currentTheme.COLORS.GRAY_600}
         />
-        <SafeAreaProvider>
-          <ToastProvider>
-            {fontsLoaded ? <Routes /> : <LoadingIndicator />}
-          </ToastProvider>
-        </SafeAreaProvider>
+        {/*         <SafeAreaProvider> */}
+        <ToastProvider>
+          {fontsLoaded ? <Routes /> : <LoadingIndicator />}
+        </ToastProvider>
+        {/* </SafeAreaProvider> */}
       </GroupContextProvider>
     </ThemeProvider>
   );
