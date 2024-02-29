@@ -1,29 +1,28 @@
-import { ArrowLeft } from 'lucide-react-native'
-import {styled} from 'styled-components/native'
-
+import { ArrowLeft } from "lucide-react-native";
+import { styled } from "styled-components/native";
 
 export const Container = styled.View`
-    width: 100%;
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
-    background-color: ${({theme}) => theme.COLORS.GRAY_600};
-    padding-top: 16px;
-    padding-left: 16px;
-    padding-right: 16px;
-    height: fit-content;
-`
+  width: 100%;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  background-color: ${({ theme }) => theme.COLORS.GRAY_600};
+  padding-top: 16px;
+  padding-left: 16px;
+  padding-right: 16px;
+  height: fit-content;
+`;
 
 export const Logo = styled.Image`
-    width: 46px;
-    height: 55px;
-`
+  width: 46px;
+  height: 55px;
+`;
 
 export const BackButton = styled.TouchableOpacity`
-flex: 1;
-`
+  flex: 1;
+`;
 
-export const BackIcon = styled(ArrowLeft).attrs(({theme}) => ({
-    color: theme.COLORS.WHITE,
-    size: 32
-}))``
+export const BackIcon = styled(ArrowLeft).attrs(({ theme }) => ({
+  color: theme.COLORS.WHITE,
+  size: 32,
+}))``;

@@ -1,7 +1,9 @@
 import { Container, Indicator } from "./styles";
 
 export function LoadingIndicator() {
-    return <Container>
-     <Indicator />
+  return (
+    <Container>
+      <Indicator />
     </Container>
+  );
 }

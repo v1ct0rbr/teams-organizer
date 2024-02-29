@@ -1,24 +1,24 @@
-import { StyleSheet, Text, TouchableOpacityProps, View } from "react-native";
-import { ButtonDanger, ButtonSuccess, ButtonTitle, Container } from "./styles";
+import { TouchableOpacityProps } from "react-native";
 
+import { Button, ButtonTitle, Container } from "./styles";
 
-interface SubmitButtonProps extends TouchableOpacityProps{
-    
-    title: string
-    isPositionBottom?: boolean,
-    isDanger?: boolean
+interface SubmitButtonProps extends TouchableOpacityProps {
+  title: string;
+  isPositionBottom?: boolean;
+  isDanger?: boolean;
 }
 
-export function MyButton({title, isPositionBottom=false, isDanger=false, ...rest}: SubmitButtonProps) {
-    return (
-  <Container>
-       { isDanger ? <ButtonDanger  {...rest}>
+export function MyButton({
+  title,
+  isPositionBottom = false,
+  isDanger = false,
+  ...rest
+}: SubmitButtonProps) {
+  return (
+    <Container>
+      <Button isDanger={isDanger} {...rest}>
         <ButtonTitle>{title}</ButtonTitle>
-       </ButtonDanger> : <ButtonSuccess  {...rest}>
-        <ButtonTitle>{title}</ButtonTitle></ButtonSuccess>}
-  </Container>      
-
-
-    )
+      </Button>
+    </Container>
+  );
 }
-
