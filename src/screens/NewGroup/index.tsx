@@ -3,6 +3,8 @@ import { InputField } from "@components/InputFiled";
 import { MainContainer } from "@components/MainContainer";
 import { MyButton } from "@components/MyButton";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { NativeStackScreenProps } from "@react-navigation/native-stack";
+import { AppError } from "@utils/AppError";
 import { useContext } from "react";
 import {
   Controller,
@@ -14,6 +16,7 @@ import { useToast } from "react-native-toast-notifications";
 import z from "zod";
 
 import { Container, IconGroups } from "./styles";
+import { RootStackParamList } from "../../@types/rootstack";
 import { GroupContext } from "../../contexts/GroupContext";
 
 const FIELD_REQUIRED_STR = "This field is required";
@@ -31,7 +34,12 @@ export const signUpFormSchema = z.object({
 
 export type SignUpFormSchema = z.infer<typeof signUpFormSchema>;
 
-export function NewGroup() {
+type NewGroupScreenProps = NativeStackScreenProps<
+  RootStackParamList,
+  "NewGroup"
+>;
+
+export const NewGroup: React.FC<NewGroupScreenProps> = ({ navigation }) => {
   const toast = useToast();
 
   const { createGroup } = useContext(GroupContext);
@@ -48,14 +56,25 @@ export function NewGroup() {
   }
 
   const onSubmit: SubmitHandler<SignUpFormSchema> = (data) => {
-    createGroup(data.name);
-    toast.show("Cadastrado com sucesso", {
-      type: "success",
-      placement: "top",
-      duration: 4000,
-      animationType: "slide-in",
-    });
-    clearFieds();
+    try {
+      createGroup(data.name);
+      toast.show("Cadastrado com sucesso", {
+        type: "success",
+        placement: "top",
+        duration: 4000,
+        animationType: "slide-in",
+      });
+      clearFieds();
+      navigation.navigate("EditGroup");
+    } catch (error) {
+      if (error instanceof AppError)
+        toast.show(error.message, {
+          type: "danger",
+          placement: "top",
+          duration: 4000,
+          animationType: "slide-in",
+        });
+    }
   };
 
   const onError: SubmitErrorHandler<SignUpFormSchema> = (errors, e) => {
@@ -99,4 +118,4 @@ export function NewGroup() {
       </Container>
     </MainContainer>
   );
-}
+};

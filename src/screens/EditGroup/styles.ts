@@ -53,11 +53,12 @@ export const TeamContainerItems = styled.View`
 export const TeamItem = styled(TouchableOpacity)<TeamItemProps>`
   align-items: center;
   justify-content: center;
-  padding: 5px;
+  padding: 6px;
   border-radius: 5px;
   ${({ selected, theme }) =>
     selected &&
     css`
+      padding: 4px;
       border-width: 2px;
       border-style: solid;
       border-color: ${theme.COLORS.GREEN_700};

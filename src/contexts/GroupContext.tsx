@@ -8,6 +8,7 @@ import {
   Team,
   groupReducer,
 } from "../reducers/GroupReducer";
+import { AppError } from "../utils/AppError";
 
 interface GroupContextType {
   createGroup: (data: string) => void;
@@ -75,6 +76,10 @@ export function GroupContextProvider({ children }: GroupContextProviderProps) {
   };
 
   function createGroup(name: string) {
+    const existingGroup = groupState.groups.find((g) => g.name === name);
+    if (existingGroup) {
+      throw new AppError("Já existe grupo com mesmo nome");
+    }
     dispatch({
       type: "ADD_NEW_GROUP",
       payload: {

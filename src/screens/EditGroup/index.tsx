@@ -5,14 +5,14 @@ import { MyButton } from "@components/MyButton";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { ListEnd } from "lucide-react-native";
-import React, { useContext, useState } from "react";
+import React, { useContext, useRef, useState } from "react";
 import {
   Controller,
   SubmitErrorHandler,
   SubmitHandler,
   useForm,
 } from "react-hook-form";
-import { FlatList, View } from "react-native";
+import { FlatList, TextInput, View } from "react-native";
 import { useToast } from "react-native-toast-notifications";
 import uuid from "react-native-uuid";
 import z from "zod";
@@ -51,10 +51,13 @@ export type EditGroupFormSchema = z.infer<typeof editGroupFormSchema>;
 
 export const EditGroup: React.FC<EditGroupScreenProps> = ({ navigation }) => {
   const { groupState, updateTeam, removeGroup } = useContext(GroupContext);
+  /* const { isLoading, setIsLoading } = useState(false); */
   const toast = useToast();
   const [selectedTeam, setSelectedTeam] = useState(
     groupState.activeGroup.teamA,
   );
+
+  const NewParticipantInputField = useRef<TextInput>(null);
 
   const methods = useForm<EditGroupFormSchema>({
     resolver: zodResolver(editGroupFormSchema),
@@ -93,7 +96,6 @@ export const EditGroup: React.FC<EditGroupScreenProps> = ({ navigation }) => {
       selectedTeam?.participants &&
       selectedTeam?.participants.findIndex((p) => p.name === data.name);
     if (existingParticipantIndex && existingParticipantIndex > -1) {
-      return;
     } else {
       const newParticipants = [
         ...selectedTeam.participants,
@@ -103,6 +105,7 @@ export const EditGroup: React.FC<EditGroupScreenProps> = ({ navigation }) => {
       setSelectedTeam(team);
       updateTeam(groupState.activeGroup.id, team);
     }
+    NewParticipantInputField.current?.blur();
     clearFieds();
   };
 
@@ -137,6 +140,7 @@ export const EditGroup: React.FC<EditGroupScreenProps> = ({ navigation }) => {
           return (
             <InputField
               action={methods.handleSubmit(onSubmit, onError)}
+              inputRef={NewParticipantInputField}
               id="group_name"
               maxLength={20}
               value={value}
@@ -144,6 +148,8 @@ export const EditGroup: React.FC<EditGroupScreenProps> = ({ navigation }) => {
               errorMessage={error?.message}
               onChangeText={onChange}
               placeholder="Nome do participante"
+              onSubmitEditing={methods.handleSubmit(onSubmit, onError)}
+              returnKeyType="done"
             />
           );
         }}

@@ -1,5 +1,5 @@
 import { Noop } from "react-hook-form";
-import { StyleSheet, TextInputProps } from "react-native";
+import { StyleSheet, TextInput, TextInputProps } from "react-native";
 
 import {
   Container,
@@ -15,18 +15,20 @@ interface InputFieldProps extends TextInputProps {
   errorMessage?: string;
   onBlur: Noop;
   action?: ({ ...props }: any) => any;
+  inputRef?: React.RefObject<TextInput>;
 }
 
 export function InputField({
   errorMessage,
   onBlur,
   action,
+  inputRef,
   ...rest
 }: InputFieldProps) {
   return (
     <Container>
       <InputContainer style={errorMessage ? localStyles.inputError : {}}>
-        <FormInputGroup onBlur={onBlur} {...rest} />
+        <FormInputGroup onBlur={onBlur} {...rest} ref={inputRef} />
         {action && (
           <InputButton onPress={action}>
             <InputButtonIcon />
